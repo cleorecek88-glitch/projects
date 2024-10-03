@@ -1,4 +1,3 @@
-cp ./compare_files.sh $1/compare_files.sh
 cp ./solution_output.csv $1/solution_output.csv
 cp ./orders.csv $1/orders.csv
 cp ./users.csv $1/users.csv
