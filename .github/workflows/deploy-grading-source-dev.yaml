@@ -5,6 +5,7 @@ on:
     paths:
       - 'fundamentals/**'
       - 'dataengineering/**'
+      - '.github/workflows/deploy-grading-source-dev.yaml'
 
 jobs:
   deploy:
