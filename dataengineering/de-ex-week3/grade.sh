@@ -1,4 +1,4 @@
-cp ./solution_output.csv $1/solution_output.csv
+cp ./solution_sqlite_database.db $1/solution_sqlite_database.db
 cd $1
 
 echo "Comparing output in dir $1"
