@@ -21,14 +21,21 @@ fi
 sqlite3 "$file1" .dump > "submit.dump"
 
 # Compare the files
-if cmp -s "submit.dump" "solution.dump"; then
-    echo "The data files are identical."
+if diff "submit.dump" "solution.dump"; then
+    echo "The databases contain the same data."
     exit 0  # Exit with code 0 if files are the same
 else
-    echo "The data files are different."
-
+    echo "The databases are different."
     exit 1  # Exit with code 1 if files are different
 fi
+
+#if cmp -s "submit.dump" "solution.dump"; then
+#    echo "The data files are identical."
+#    exit 0  # Exit with code 0 if files are the same
+#else
+#    echo "The data files are different."
+#    exit 1  # Exit with code 1 if files are different
+#fi
 
 # Clean up temporary dump file
 rm "submit.dump"
