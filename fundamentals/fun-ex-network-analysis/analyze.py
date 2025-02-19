@@ -51,7 +51,7 @@ if __name__ == '__main__':
         }
 
         piblings = parents.copy()
-        for i in range(20):
+        for i in range(100):
             piblings |= {
                 row['target']
                 for row in data
@@ -83,28 +83,29 @@ if __name__ == '__main__':
     # Make a histogram of the number of niblings per node
 
     def get_niblings(node):
-        children = {
-            row['target']
-            for row in data
-            if row['source'] == node
-            and row['type'] == 'parent'
-        }
-
-        niblings = children.copy()
-        for i in range(20):
-            niblings |= {
+        siblings = {node}
+        for i in range(100):
+            siblings |= {
                 row['target']
                 for row in data
-                if row['source'] in niblings
+                if row['source'] in siblings
                 and row['type'] == 'sibling'
             } | {
                 row['source']
                 for row in data
-                if row['target'] in niblings
+                if row['target'] in siblings
                 and row['type'] == 'sibling'
             }
+        siblings -= {node}
 
-        return niblings - children
+        children = {
+            row['target']
+            for row in data
+            if row['source'] in siblings
+            and row['type'] == 'parent'
+        }
+
+        return children
     
     niblings = {node: len(get_niblings(node)) for node in nodes}
 
