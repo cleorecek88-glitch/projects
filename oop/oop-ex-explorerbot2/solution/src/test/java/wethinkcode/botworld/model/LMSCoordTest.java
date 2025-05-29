@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LMSPositionTest
+public class LMSCoordTest
 {
     @Test
-    void incrementX(){
+    void right(){
         Position p = new Position( 0, 0 );
-        Position result = p.incrementX();
+        Position result = p.right();
         assertEquals( 1, result.x() );
         assertNotEquals( p, result );
     }
@@ -17,23 +17,23 @@ public class LMSPositionTest
     @Test
     void decrementX(){
         Position p = new Position( 0, 0 );
-        Position result = p.decrementX();
+        Position result = p.left();
         assertEquals( -1, result.x() );
         assertNotEquals( p, result );
     }
 
     @Test
-    void incrementY(){
+    void down(){
         Position p = new Position( 0, 0 );
-        Position result = p.incrementY();
+        Position result = p.down();
         assertEquals( 1, result.y() );
         assertNotEquals( p, result );
     }
 
     @Test
-    void decrementY(){
+    void up(){
         Position p = new Position( 0, 0 );
-        Position result = p.decrementY();
+        Position result = p.up();
         assertEquals( -1, result.y() );
         assertNotEquals( p, result );
     }

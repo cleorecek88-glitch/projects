@@ -8,7 +8,6 @@ public class ExplorerBot
     private Position position;
     private Heading heading = Heading.N;
 
-
     public ExplorerBot( int initialX, int initialY ){
         position = new Position( initialX, initialY );
         if( ! worldContains( position ) ) throw new IllegalArgumentException();
@@ -16,7 +15,7 @@ public class ExplorerBot
 
     /**
      * Turn the receiver bot to a new heading.
-     * @param newHeading
+     * @param newHeading Desired heading.
      */
     public void turnTo( Heading newHeading ){
         heading = newHeading;
@@ -35,7 +34,7 @@ public class ExplorerBot
      * @return The receiver's current position.
      */
     Position position(){
-        return this.position;
+        return position;
     }
 
     /**
