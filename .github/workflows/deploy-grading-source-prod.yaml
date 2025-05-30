@@ -4,20 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Are you sure you want to deploy to PROD?'
+        description: "Are you sure you want to deploy to PROD?"
         required: true
-        default: 'no'
+        default: "no"
 
 jobs:
   check-confirm:
     runs-on: ubuntu-latest
     steps:
-    - name: Check Confirmation
-      run: |
-        if [ "${{ github.event.inputs.confirm }}" != "yes" ]; then
-          echo "Workflow was not confirmed, exiting..."
-          exit 1
-        fi
+      - name: Check Confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "yes" ]; then
+            echo "Workflow was not confirmed, exiting..."
+            exit 1
+          fi
 
   deploy:
     name: Deploy to S3
@@ -25,28 +25,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-        aws-region: af-south-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-region: af-south-1
 
-    - name: Sync to S3
-      run: |
-        aws s3 sync ./fundamentals s3://${{ secrets.S3_BUCKET_NAME_PROD }}/fundamentals --delete
+      - name: Sync to S3
+        run: |
+          aws s3 sync ./fundamentals s3://${{ secrets.S3_BUCKET_NAME_PROD }}/fundamentals --delete
 
-    - name: Sync OOP to S3
-      run: |
-        aws s3 sync ./oop s3://${{ secrets.S3_BUCKET_NAME_PROD }}/oop --delete
+      - name: Sync OOP to S3
+        run: |
+          aws s3 sync ./oop s3://${{ secrets.S3_BUCKET_NAME_PROD }}/oop --delete
 
-    - name: Sync Data Engineering to S3
-      run: |
-        aws s3 sync ./dataengineering s3://${{ secrets.S3_BUCKET_NAME_PROD }}/dataengineering --delete
+      - name: Sync Data Engineering to S3
+        run: |
+          aws s3 sync ./dataengineering s3://${{ secrets.S3_BUCKET_NAME_PROD }}/dataengineering --delete
 
-    - name: Sync Mobile to S3
-      run: |
-        aws s3 sync ./mobile s3://${{ secrets.S3_BUCKET_NAME_PROD }}/mobile --delete
+      - name: Sync Mobile to S3
+        run: |
+          aws s3 sync ./mobile s3://${{ secrets.S3_BUCKET_NAME_PROD }}/mobile --delete
+
+      - name: Sync Systems Integration to S3
+        run: |
+          aws s3 sync ./systemsintegration s3://${{ secrets.S3_BUCKET_NAME_DEV }}/systemsintegration --delete
