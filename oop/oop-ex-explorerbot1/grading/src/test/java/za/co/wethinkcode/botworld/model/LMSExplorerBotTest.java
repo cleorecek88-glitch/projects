@@ -3,73 +3,91 @@ package za.co.wethinkcode.botworld.model;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static za.co.wethinkcode.botworld.model.Heading.*;
 
 public class LMSExplorerBotTest
 {
-    private static final int MIDDLE_X = ExplorerBot.WORLD_MAX_X / 2;
-    private static final int MIDDLE_Y = ExplorerBot.WORLD_MAX_Y / 2;
+    private World world = new World( 3, 3 );
 
     @Test
-    void moveNorth_insideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, MIDDLE_Y );
-        bot.turnTo( Heading.N );
+    void move_north_insideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), insideY() );
+        bot.turnTo( North );
         bot.move();
-        assertEquals( MIDDLE_Y - 1, bot.yPosition() );
+        assertEquals( insideY() - 1, bot.position().y() );
     }
 
     @Test
-    void moveSouth_insideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, MIDDLE_Y );
-        bot.turnTo( Heading.S );
+    void move_south_insideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), insideY() );
+        bot.turnTo( South );
         bot.move();
-        assertEquals( MIDDLE_Y + 1, bot.yPosition() );
+        assertEquals( insideY() + 1, bot.position().y() );
     }
 
     @Test
-    void moveWest_insideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, MIDDLE_Y );
-        bot.turnTo( Heading.W );
+    void move_west_insideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), insideY() );
+        bot.turnTo( West );
         bot.move();
-        assertEquals( MIDDLE_X - 1, bot.xPosition() );
+        assertEquals( insideX() - 1, bot.position().x() );
     }
 
     @Test
-    void moveEast_insideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, MIDDLE_Y );
-        bot.turnTo( Heading.E );
+    void move_east_insideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), insideY() );
+        bot.turnTo( East );
         bot.move();
-        assertEquals( MIDDLE_X + 1, bot.xPosition() );
+        assertEquals( insideX() + 1, bot.position().x() );
     }
 
     @Test
-    void moveNorth_outsideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, 0 );
-        bot.turnTo( Heading.N );
+    void move_north_outsideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), 0 );
+        bot.turnTo( North );
         bot.move();
-        assertEquals( 0, bot.yPosition() );
+        assertEquals( 0, bot.position().y() );
     }
 
     @Test
-    void moveSouth_outsideWorld(){
-        ExplorerBot bot =  new ExplorerBot( MIDDLE_X, ExplorerBot.WORLD_MAX_Y );
-        bot.turnTo( Heading.S );
+    void move_south_outsideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, insideX(), world.southEdge() );
+        bot.turnTo( South );
         bot.move();
-        assertEquals( ExplorerBot.WORLD_MAX_Y, bot.yPosition() );
+        assertEquals( world.southEdge(), bot.position().y() );
     }
 
     @Test
-    void moveWest_outsideWorld(){
-        ExplorerBot bot =  new ExplorerBot( 0, MIDDLE_Y );
-        bot.turnTo( Heading.W );
+    void move_west_outsideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, 0, insideY() );
+        bot.turnTo( West );
         bot.move();
-        assertEquals( 0, bot.xPosition() );
+        assertEquals( 0, bot.position().x() );
     }
 
     @Test
-    void moveEast_outsideWorld(){
-        ExplorerBot bot =  new ExplorerBot( ExplorerBot.WORLD_MAX_X, MIDDLE_Y );
-        bot.turnTo( Heading.E );
+    void move_east_outsideWorld(){
+        ExplorerBot bot =  new ExplorerBot( world );
+        world.add( bot, world.eastEdge(), insideY() );
+        bot.turnTo( East );
         bot.move();
-        assertEquals( ExplorerBot.WORLD_MAX_X, bot.xPosition() );
+        assertEquals( world.eastEdge(), bot.position().x() );
+    }
+
+    // Answer a point somewhere near the middle of the world's N-S extent
+    private int insideY(){
+        return world.height() / 2;
+    }
+
+    // Answer a point somewhere near the middle of the world's N-S extent
+    private int insideX(){
+        return world.width() / 2;
     }
 }
