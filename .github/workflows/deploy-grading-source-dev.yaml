@@ -10,6 +10,7 @@ on:
       - "mobile/**"
       - "oop/**"
       - "systemsintegration/**"
+      - "webdev/**"
       - ".github/workflows/deploy-grading-source-dev.yaml"
 
 jobs:
@@ -47,3 +48,7 @@ jobs:
       - name: Sync Systems Integration to S3
         run: |
           aws s3 sync ./systemsintegration s3://${{ secrets.S3_BUCKET_NAME_DEV }}/systemsintegration --delete
+
+      - name: Sync Web Dev to S3
+        run: |
+          aws s3 sync ./webdev s3://${{ secrets.S3_BUCKET_NAME_PROD }}/webdev --delete
