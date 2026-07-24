@@ -3,34 +3,52 @@ from pprint import pprint
 def parse_fen(fen):
     fen_pieces, to_move, castling_rights, ep, hm, fm = fen.split(" ")
     pieces = [[]]
-    for char in fen:
+    
+    print(fen_pieces)
+    for char in fen_pieces:
         if char.isdigit():
             pieces[-1].extend(["."] * int(char))
         elif char == "/":
             pieces.append([])
         else:
             pieces[-1].append(char)
+            
+    board = {"pieces": pieces, "turn": to_move}
 
-    return pieces, to_move
+    return board
 
-board = parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 -1")
+board = parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/ w KQkq - 0 -1")
 pprint(board)
-
-# fen_itemsW = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-# piece_position = parse_fen(fen_itemsW)
-# print(piece_position)
-
-# fen_itemsB = "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1"
-# piece_positionB = parse_fen(fen_itemsB)
-# print(piece_positionB)
 def to_square(row, col):
     files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     rank = 8 - row
     return f"{files[col]}{rank}"
 
+print(to_square(4, 4))
 
+def knights_moves(board, row, col, all_moves, is_white_piece, from_sq):
+    knight_offsets = [
+        (-2, -1), (-2, 1), (-1, -2), (-1, 2),
+        (1, -2),  (1, 2),  (2, -1),  (2, 1)
+    ]
+
+    for dr, dc in knight_offsets:
+        # current position (row, col)
+        target = (row + dr, col + dc)
+        
+        if target in board:
+            target_piece = board[target]
+            if target_piece == '.' or (is_white_piece != target_piece.isupper()):
+                all_moves.append(from_sq + to_square(target[0], target[1]))
+            elif target_piece != "." and (is_white_piece == target_piece.isupper()):
+                pass
+    
+    return all_moves
+                
+    
 
 def generate_moves(board):
+    global all_moves
     all_moves = []
     active_color = board.get('turn', 'w')
 
@@ -40,10 +58,10 @@ def generate_moves(board):
         'Q': [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
     }
 
-    knight_offsets = [
-        (-2, -1), (-2, 1), (-1, -2), (-1, 2),
-        (1, -2),  (1, 2),  (2, -1),  (2, 1)
-    ]
+    # knight_offsets = [
+    #     (-2, -1), (-2, 1), (-1, -2), (-1, 2),
+    #     (1, -2),  (1, 2),  (2, -1),  (2, 1)
+    # ]
 
     king_offsets = [
         (-1, -1), (-1, 0), (-1, 1),
@@ -65,12 +83,9 @@ def generate_moves(board):
         from_sq = to_square(row, col)
 
         if piece_type == 'N':
-            for dr, dc in knight_offsets:
-                target = (row + dr, col + dc)
-                if target in board:
-                    target_piece = board[target]
-                    if target_piece == '.' or (is_white_piece != target_piece.isupper()):
-                        all_moves.append(from_sq + to_square(target[0], target[1]))
+
+            all_moves = knights_moves(board, row, col, all_moves, is_white_piece, from_sq)
+            print("Current moves:", all_moves)
 
         elif piece_type == 'K':
             for dr, dc in king_offsets:
@@ -112,7 +127,6 @@ def generate_moves(board):
 
     return all_moves
 
-
 def apply_move(board, move_str):
     files = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
@@ -129,6 +143,9 @@ def apply_move(board, move_str):
         new_board['turn'] = 'b' if new_board['turn'] == 'w' else 'w'
 
     return new_board
+
+
+print(generate_moves(board))
 
 # def generate_moves(board):
 #     raise NotImplementedError("This function is not implemented yet.")
